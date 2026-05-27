@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FOUBA — Facultad de Odontología · UBA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#D42B2B;
+  --navy:#1E2550;
+  --offwhite:#F4F3F1;
+  --white:#FFFFFF;
+  --black:#0A0A0A;
+  --ease-out:cubic-bezier(0.16,1,0.3,1);
+  --pad-x:clamp(1.25rem,5vw,5rem);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--offwhite);color:var(--black);-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+img{display:block;max-width:100%;}
+a{text-decoration:none;color:inherit;}
+ul{list-style:none;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;}
+.wrap{width:100%;max-width:1440px;margin:0 auto;padding:0 var(--pad-x);}
+
+/* REVEAL */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .75s var(--ease-out),transform .75s var(--ease-out);}
+.rv.in{opacity:1;transform:none;}
+.rl{opacity:0;transform:translateX(-28px);transition:opacity .75s var(--ease-out),transform .75s var(--ease-out);}
+.rl.in{opacity:1;transform:none;}
+.rr{opacity:0;transform:translateX(28px);transition:opacity .75s var(--ease-out),transform .75s var(--ease-out);}
+.rr.in{opacity:1;transform:none;}
+.d1{transition-delay:.1s!important;}
+.d2{transition-delay:.2s!important;}
+.d3{transition-delay:.3s!important;}
+.d4{transition-delay:.4s!important;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.65rem 1.5rem;font-size:.8125rem;font-weight:600;letter-spacing:.02em;transition:all .22s var(--ease-out);cursor:pointer;border:none;}
+.btn-r{background:var(--red);color:#fff;}
+.btn-r:hover{background:#b82020;transform:translateY(-1px);}
+.btn-n{background:var(--navy);color:#fff;}
+.btn-n:hover{background:#141936;transform:translateY(-1px);}
+.btn-ol-w{border:1px solid rgba(255,255,255,.4);color:#fff;background:transparent;}
+.btn-ol-w:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.7);}
+.btn-ol-n{border:1px solid var(--navy);color:var(--navy);background:transparent;}
+.btn-ol-n:hover{background:var(--navy);color:#fff;}
+.btn-wh{background:#fff;color:var(--navy);}
+.btn-wh:hover{background:var(--offwhite);}
+
+/* ─── HEADER ─────────────── */
+.hdr{position:fixed;top:0;left:0;right:0;z-index:100;transition:background .35s,box-shadow .35s;}
+.hdr.s{background:rgba(255,255,255,.96);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 1px 0 rgba(0,0,0,.07);}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px;padding:0 var(--pad-x);max-width:1440px;margin:0 auto;}
+/* Logo image */
+.logo{display:flex;align-items:center;gap:.75rem;z-index:2;}
+.logo-img{height:44px;width:44px;object-fit:contain;display:block;}
+.logo-text-wrap{display:flex;flex-direction:column;}
+.logo-fouba{font-size:.8125rem;font-weight:800;letter-spacing:.04em;color:#fff;line-height:1;}
+.hdr.s .logo-fouba{color:var(--navy);}
+.logo-sub{font-size:.6rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-top:2px;}
+.hdr.s .logo-sub{color:rgba(30,37,80,.4);}
+.nav-links{display:flex;gap:2rem;}
+.nav-links a{font-size:.8125rem;font-weight:500;color:rgba(255,255,255,.82);letter-spacing:.01em;position:relative;transition:color .2s;}
+.hdr.s .nav-links a{color:rgba(30,37,80,.75);}
+.nav-links a::after{content:'';position:absolute;left:0;bottom:-3px;width:0;height:1.5px;background:var(--red);transition:width .3s var(--ease-out);}
+.nav-links a:hover::after{width:100%;}
+.nav-links a:hover{color:#fff;}
+.hdr.s .nav-links a:hover{color:var(--navy);}
+.nav-actions{display:flex;align-items:center;gap:.75rem;}
+.ham{display:none;flex-direction:column;gap:5px;padding:4px;cursor:pointer;z-index:101;color:#fff;}
+.hdr.s .ham{color:var(--navy);}
+.ham span{display:block;width:22px;height:1.5px;background:currentColor;transition:all .3s var(--ease-out);}
+.ham.o span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+.ham.o span:nth-child(2){opacity:0;}
+.ham.o span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+.mob-nav{display:none;position:fixed;inset:0;background:var(--navy);z-index:99;flex-direction:column;align-items:center;justify-content:center;gap:1.75rem;opacity:0;pointer-events:none;transition:opacity .35s var(--ease-out);}
+.mob-nav.o{opacity:1;pointer-events:all;}
+.mob-nav a{font-size:clamp(1.5rem,6vw,2.5rem);font-weight:700;color:#fff;transition:color .2s;}
+.mob-nav a:hover{color:var(--red);}
+
+/* ─── HERO — SCROLL-PINNED ──────────── */
+/*
+  Architecture (Shopify-style):
+  .hero-pin-wrap  — tall scroll spacer (height = viewport * SCROLL_MULTIPLIER)
+                    This is what gives the "pinned" time.
+  .hero-sticky    — position:sticky; top:0; height:100svh — the visible frame
+  .hero-video-wrap / video — video fades to low opacity as scroll progresses
+  .hero-text-layer         — individual text pieces translate+fade in
+*/
+
+.hero-pin-wrap{
+  /* 400vh = 4x the viewport scroll space for the animation */
+  height:400svh;
+  position:relative;
+}
+.hero-sticky{
+  position:sticky;
+  top:0;
+  height:100svh;
+  min-height:600px;
+  overflow:hidden;
+  background:var(--navy);
+}
+
+/* video layer */
+.hero-video-wrap{position:absolute;inset:0;z-index:0;will-change:opacity;}
+.hero-video-wrap video{width:100%;height:100%;object-fit:cover;display:block;}
+.hero-video-ov{position:absolute;inset:0;background:rgba(6,9,22,.45);}
+
+/* gradient darkens bottom — always visible */
+.hero-grad-btm{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(6,9,22,.0) 0%,rgba(6,9,22,.78) 65%,rgba(6,9,22,.98) 100%);z-index:1;}
+
+/* text layer — fills sticky frame */
+.hero-text-layer{
+  position:absolute;inset:0;z-index:2;
+  display:flex;align-items:flex-end;
+  pointer-events:none;
+}
+.hero-text-layer.show{pointer-events:all;}
+.hero-text-inner{
+  width:100%;max-width:1440px;margin:0 auto;
+  padding:0 var(--pad-x) clamp(2.5rem,6vw,5.5rem);
+  display:grid;grid-template-columns:1fr 300px;gap:2.5rem;align-items:flex-end;
+}
+
+/* Individual animated pieces — start invisible+shifted */
+.hero-eyebrow{
+  display:flex;align-items:center;gap:.75rem;margin-bottom:1.375rem;
+  opacity:0;transform:translateY(22px);
+  transition:opacity .7s var(--ease-out), transform .7s var(--ease-out);
+}
+.hero-h1{
+  font-size:clamp(3rem,7.5vw,8rem);font-weight:800;line-height:.9;letter-spacing:-.04em;color:#fff;margin-bottom:1.75rem;
+  opacity:0;transform:translateY(30px);
+  transition:opacity .8s var(--ease-out) .12s, transform .8s var(--ease-out) .12s;
+}
+.hero-p{
+  font-size:clamp(.9rem,1.3vw,1.1rem);line-height:1.72;color:rgba(255,255,255,.55);max-width:520px;margin-bottom:2.25rem;
+  opacity:0;transform:translateY(22px);
+  transition:opacity .7s var(--ease-out) .28s, transform .7s var(--ease-out) .28s;
+}
+.hero-ctas{
+  display:flex;flex-wrap:wrap;gap:.75rem;
+  opacity:0;transform:translateY(18px);
+  transition:opacity .65s var(--ease-out) .42s, transform .65s var(--ease-out) .42s;
+}
+.hero-aside{
+  opacity:0;transform:translateX(28px);
+  transition:opacity .8s var(--ease-out) .3s, transform .8s var(--ease-out) .3s;
+}
+
+/* when JS adds .revealed, all children animate in */
+.hero-text-layer.revealed .hero-eyebrow,
+.hero-text-layer.revealed .hero-h1,
+.hero-text-layer.revealed .hero-p,
+.hero-text-layer.revealed .hero-ctas,
+.hero-text-layer.revealed .hero-aside{
+  opacity:1;transform:none;
+}
+
+.hero-h1 em{font-style:normal;color:var(--red);}
+
+.dot{width:7px;height:7px;flex-shrink:0;background:var(--red);animation:pulse 2.2s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(212,43,43,.55);}70%{box-shadow:0 0 0 10px rgba(212,43,43,0);}100%{box-shadow:0 0 0 0 rgba(212,43,43,0);}}
+.eyebrow-txt{font-size:.6875rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.45);}
+
+.glass-panel{background:rgba(255,255,255,.06);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.09);padding:1.75rem;}
+.gp-lbl{font-size:.6rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:1.125rem;}
+.stats-row{display:flex;gap:1.5rem;padding-bottom:1.25rem;margin-bottom:1.25rem;border-bottom:1px solid rgba(255,255,255,.07);}
+.stat-n{font-size:1.875rem;font-weight:800;letter-spacing:-.05em;color:#fff;line-height:1;margin-bottom:.2rem;}
+.stat-n span{color:var(--red);}
+.stat-d{font-size:.6875rem;color:rgba(255,255,255,.4);}
+.ev-nxt-lbl{font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:.75rem;}
+.ev-item{display:flex;gap:.875rem;align-items:flex-start;}
+.ev-date-box{flex-shrink:0;width:38px;background:var(--red);padding:.4rem .25rem;text-align:center;}
+.ev-day{font-size:1.125rem;font-weight:800;color:#fff;line-height:1;}
+.ev-mon{font-size:.5rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.65);margin-top:1px;}
+.ev-ti{font-size:.8125rem;font-weight:600;color:#fff;line-height:1.35;margin-bottom:.2rem;}
+.ev-su{font-size:.6875rem;color:rgba(255,255,255,.38);}
+
+/* Scroll hint — inside sticky, top of animation */
+.scroll-hint{
+  position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
+  z-index:3;display:flex;flex-direction:column;align-items:center;gap:.5rem;
+  animation:fu 1s 1.3s var(--ease-out) both;
+  transition:opacity .4s ease;
+}
+.scroll-hint span{font-size:.6rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.28);}
+.scroll-ring{width:28px;height:28px;border:1px solid rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;animation:bounce 2s 2s ease-in-out infinite;}
+.scroll-ring svg{width:13px;height:13px;stroke:rgba(255,255,255,.35);fill:none;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(5px);}}
+@keyframes fu{from{opacity:0;transform:translateY(26px);}to{opacity:1;transform:none;}}
+
+/* ─── TICKER ─────────────── */
+.ticker{background:var(--navy);overflow:hidden;height:40px;display:flex;align-items:center;border-top:1px solid rgba(255,255,255,.06);}
+.ticker-track{display:flex;white-space:nowrap;animation:tick 55s linear infinite;}
+.ticker-track:hover{animation-play-state:paused;}
+.t-item{display:inline-flex;align-items:center;padding:0 2rem;font-size:.6875rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.42);}
+.t-item.hi{color:rgba(255,255,255,.78);}
+.t-sep{display:inline-block;width:4px;height:4px;background:var(--red);flex-shrink:0;}
+@keyframes tick{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* ─── SECTION HEADER ─────── */
+.sh{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:clamp(2rem,4vw,3.25rem);gap:1.5rem;}
+.sh-l{flex:1;}
+.sh-tag{display:inline-flex;align-items:center;gap:.5rem;margin-bottom:.625rem;}
+.sh-line{display:inline-block;width:22px;height:1.5px;background:var(--red);}
+.lbl{font-size:.6875rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(30,37,80,.5);}
+.lbl-lt{color:rgba(255,255,255,.42);}
+.sec-h{font-size:clamp(1.75rem,4vw,3.25rem);font-weight:800;letter-spacing:-.035em;line-height:.92;color:var(--navy);}
+.sec-h em{font-style:normal;color:var(--red);}
+.sec-h-lt{color:#fff;}
+.sh-link{font-size:.8125rem;font-weight:600;color:var(--navy);display:flex;align-items:center;gap:.4rem;flex-shrink:0;transition:gap .25s,color .2s;}
+.sh-link:hover{color:var(--red);gap:.65rem;}
+.sh-link-lt{color:rgba(255,255,255,.5);}
+.sh-link-lt:hover{color:#fff;}
+.sh-link svg{width:14px;height:14px;stroke:currentColor;fill:none;}
+
+/* ─── ACCESOS ─────────────── */
+.accesos{background:var(--white);border-bottom:1px solid rgba(30,37,80,.08);}
+.acc-grid{display:grid;grid-template-columns:repeat(6,1fr);}
+.acc-item{display:flex;flex-direction:column;align-items:center;gap:.75rem;padding:2rem 1rem;border-right:1px solid rgba(30,37,80,.07);cursor:pointer;transition:background .22s;text-align:center;position:relative;overflow:hidden;}
+.acc-item:last-child{border-right:none;}
+.acc-item::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:2px;background:var(--red);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease-out);}
+.acc-item:hover{background:var(--offwhite);}
+.acc-item:hover::after{transform:scaleX(1);}
+.acc-item:hover .acc-icon{transform:translateY(-3px);}
+.acc-icon{width:46px;height:46px;background:var(--navy);display:flex;align-items:center;justify-content:center;transition:transform .3s var(--ease-out);flex-shrink:0;}
+.acc-icon svg{width:20px;height:20px;stroke:#fff;fill:none;}
+.acc-name{font-size:.75rem;font-weight:600;color:rgba(30,37,80,.75);line-height:1.3;}
+
+/* ─── CONGRESO BANNER ─────── */
+.cong-banner{background:var(--red);padding:0;}
+.cong-banner-inner{display:grid;grid-template-columns:1fr 1fr;min-height:420px;}
+.cb-left{padding:clamp(2.5rem,5vw,5rem);display:flex;flex-direction:column;justify-content:space-between;}
+.cb-eyebrow{font-size:.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:1.25rem;}
+.cb-title{font-size:clamp(2rem,4.5vw,4rem);font-weight:800;letter-spacing:-.04em;line-height:.9;color:#fff;margin-bottom:1.5rem;}
+.cb-desc{font-size:.9375rem;color:rgba(255,255,255,.7);line-height:1.7;margin-bottom:2rem;max-width:440px;}
+.cb-ctas{display:flex;flex-wrap:wrap;gap:.75rem;}
+.cb-right{background:var(--navy);padding:clamp(2.5rem,5vw,5rem);display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;}
+/* jornadas logo as bg watermark */
+.cb-right-logo{position:absolute;right:-3rem;bottom:-3rem;width:clamp(260px,40%,380px);opacity:.06;pointer-events:none;user-select:none;}
+.cb-right-label{font-size:.6rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:1.25rem;}
+.cb-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;position:relative;z-index:1;}
+.cb-info-item{border-top:1px solid rgba(255,255,255,.08);padding-top:1.25rem;}
+.cb-info-icon{width:34px;height:34px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;margin-bottom:.875rem;}
+.cb-info-icon svg{width:16px;height:16px;stroke:rgba(255,255,255,.6);fill:none;}
+.cb-info-val{font-size:1.125rem;font-weight:700;color:#fff;letter-spacing:-.02em;margin-bottom:.25rem;}
+.cb-info-key{font-size:.6875rem;color:rgba(255,255,255,.38);}
+.cb-cta-row{display:flex;gap:.75rem;margin-top:2rem;position:relative;z-index:1;}
+
+/* ─── NOTICIAS ─────────────── */
+.noticias{padding:clamp(4rem,7vw,7rem) 0;background:var(--offwhite);}
+/* Featured + sidebar + twitter — all full height */
+.news-grid{display:grid;grid-template-columns:1fr 380px;gap:0;}
+.news-feat{display:block;position:relative;overflow:hidden;min-height:480px;cursor:pointer;background:var(--navy);}
+.nf-img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease-out);}
+.news-feat:hover .nf-img{transform:scale(1.04);}
+.nf-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(6,9,22,.94) 0%,rgba(6,9,22,.05) 58%);}
+.nf-body{position:absolute;bottom:0;left:0;right:0;padding:2rem;}
+.nf-tags{display:flex;gap:.5rem;margin-bottom:.875rem;}
+.tag-r{background:var(--red);color:#fff;font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.22rem .625rem;}
+.tag-n{background:var(--navy);color:#fff;font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.22rem .625rem;}
+.tag-wt{border:1px solid rgba(255,255,255,.22);color:rgba(255,255,255,.6);font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.22rem .625rem;}
+.tag-g{border:1px solid rgba(30,37,80,.18);color:rgba(30,37,80,.5);font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.22rem .625rem;}
+.nf-title{font-size:clamp(1.1rem,2vw,1.55rem);font-weight:700;color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:.5rem;}
+.nf-meta{font-size:.6875rem;color:rgba(255,255,255,.4);font-weight:500;}
+/* sidebar */
+.news-side{display:flex;flex-direction:column;}
+.news-row{display:flex;gap:1.125rem;padding:1.25rem 1.375rem;border-bottom:1px solid rgba(30,37,80,.07);cursor:pointer;position:relative;text-decoration:none;transition:background .2s;}
+.news-row:hover{background:var(--white);}
+.news-row::before{content:'';position:absolute;left:0;top:50%;width:2px;height:0;background:var(--red);transform:translateY(-50%);transition:height .3s var(--ease-out);}
+.news-row:hover::before{height:55%;}
+.news-thumb{width:70px;height:70px;overflow:hidden;flex-shrink:0;background:var(--offwhite);}
+.news-thumb-img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease-out);}
+.news-row:hover .news-thumb-img{transform:scale(1.08);}
+.nr-title{font-size:.875rem;font-weight:600;color:var(--navy);line-height:1.3;letter-spacing:-.01em;margin-bottom:.35rem;transition:color .2s;}
+.news-row:hover .nr-title{color:var(--red);}
+.nr-meta{font-size:.6875rem;color:rgba(30,37,80,.38);font-weight:500;}
+/* twitter */
+.news-twitter{border-left:1px solid rgba(30,37,80,.08);display:flex;flex-direction:column;background:var(--navy);overflow:hidden;}
+.tw-header{padding:1.125rem 1.375rem;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.tw-header-left{display:flex;align-items:center;gap:.625rem;}
+.tw-icon{width:28px;height:28px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.tw-icon svg{width:14px;height:14px;fill:#fff;}
+.tw-label{font-size:.75rem;font-weight:700;color:#fff;letter-spacing:.01em;}
+.tw-handle{font-size:.6875rem;color:rgba(255,255,255,.38);}
+.tw-follow{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;border:1px solid rgba(255,255,255,.3);padding:.2rem .5rem;transition:all .2s;}
+.tw-follow:hover{background:var(--red);border-color:var(--red);}
+.tw-feed{flex:1;overflow:hidden;min-height:0;background:var(--navy);}
+.tw-feed iframe{width:100%!important;border:none!important;background:transparent!important;}
+.tw-footer{padding:.875rem 1.375rem;border-top:1px solid rgba(255,255,255,.08);flex-shrink:0;}
+.tw-footer a{font-size:.75rem;font-weight:600;color:rgba(255,255,255,.6);display:flex;align-items:center;gap:.4rem;transition:color .2s;}
+.tw-footer a:hover{color:#fff;}
+.tw-footer svg{width:13px;height:13px;stroke:currentColor;fill:none;}
+
+/* ─── EVENTOS ─────────────── */
+.eventos{padding:clamp(4rem,7vw,7rem) 0;background:var(--navy);}
+.ev-grid{display:grid;grid-template-columns:repeat(3,1fr);}
+.ev-card{background:transparent;padding:2.25rem 2rem;cursor:pointer;transition:background .22s;position:relative;overflow:hidden;display:block;border-right:1px solid rgba(255,255,255,.06);}
+.ev-card:last-child{border-right:none;}
+.ev-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:2px;background:var(--red);transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease-out);}
+.ev-card:hover{background:rgba(255,255,255,.04);}
+.ev-card:hover::before{transform:scaleX(1);}
+.ev-big-d{font-size:2.75rem;font-weight:800;letter-spacing:-.05em;color:var(--red);line-height:1;}
+.ev-mn-yr{display:flex;flex-direction:column;margin-left:.4rem;}
+.ev-m{font-size:.625rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);}
+.ev-y{font-size:.875rem;font-weight:600;color:rgba(255,255,255,.22);}
+.ev-dr{display:inline-flex;align-items:baseline;margin-bottom:1.375rem;}
+.ev-cat{font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:.5rem;}
+.ev-ti{font-size:1rem;font-weight:700;color:#fff;line-height:1.35;letter-spacing:-.01em;margin-bottom:.625rem;transition:color .2s;}
+.ev-card:hover .ev-ti{color:rgba(255,255,255,.75);}
+.ev-de{font-size:.8125rem;color:rgba(255,255,255,.38);line-height:1.65;margin-bottom:1.25rem;}
+.ev-ft{display:flex;align-items:center;justify-content:space-between;}
+.ev-loc{font-size:.6875rem;color:rgba(255,255,255,.28);display:flex;align-items:center;gap:.35rem;}
+.ev-loc svg{width:11px;height:11px;stroke:currentColor;fill:none;}
+.ev-arr{width:30px;height:30px;border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;transition:all .22s;}
+.ev-arr svg{width:12px;height:12px;stroke:rgba(255,255,255,.38);fill:none;}
+.ev-card:hover .ev-arr{background:var(--red);border-color:var(--red);}
+.ev-card:hover .ev-arr svg{stroke:#fff;}
+
+/* ─── CENTRO DE RECURSOS (ex-Ciencia en movimiento) ─── */
+.cong-sec{padding:clamp(4rem,7vw,7rem) 0;background:var(--offwhite);overflow:hidden;}
+.cong-stage{position:relative;height:clamp(460px,72vh,760px);overflow:hidden;background:var(--navy);display:flex;align-items:center;justify-content:center;}
+/* jornadas logo watermark replacing "FOUBA" text */
+.cong-bg-logo{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;user-select:none;}
+.cong-bg-logo img{width:clamp(300px,55%,600px);opacity:.05;}
+.cong-layer{position:absolute;will-change:transform;}
+/* card links */
+.res-card{overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.55);display:block;cursor:pointer;text-decoration:none;transition:transform .35s var(--ease-out),box-shadow .35s;}
+.res-card:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 50px 90px rgba(0,0,0,.7);}
+.res-inner{padding:1.75rem;}
+.res-lbl{font-size:.55rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:.5rem;}
+.res-title{font-size:clamp(.875rem,1.5vw,1.375rem);font-weight:800;line-height:1.1;letter-spacing:-.025em;color:#fff;margin-bottom:.375rem;}
+.res-sub{font-size:.6875rem;color:rgba(255,255,255,.45);line-height:1.4;}
+.res-arrow{margin-top:1rem;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5);display:flex;align-items:center;gap:.3rem;}
+.res-arrow svg{width:12px;height:12px;stroke:currentColor;fill:none;}
+.res-card:hover .res-arrow{color:rgba(255,255,255,.85);}
+.fl1{width:clamp(175px,22vw,275px);top:8%;left:6%;rotate:-4deg;background:var(--red);}
+.fl2{width:clamp(205px,26vw,320px);top:17%;left:27%;rotate:2deg;background:var(--navy);border:1px solid rgba(255,255,255,.1);}
+.fl3{width:clamp(175px,20vw,255px);top:4%;right:7%;rotate:5deg;background:rgba(30,37,80,.8);border:1px solid rgba(255,255,255,.07);}
+.cong-center{position:relative;z-index:10;text-align:center;padding:2rem;pointer-events:none;}
+.cong-center h2{font-size:clamp(2rem,5vw,4.5rem);font-weight:900;letter-spacing:-.04em;color:#fff;line-height:.92;margin-bottom:.875rem;}
+.cong-center h2 em{font-style:normal;color:var(--red);}
+.cong-center p{font-size:clamp(.875rem,1.4vw,1.1rem);color:rgba(255,255,255,.42);max-width:460px;margin:0 auto;line-height:1.65;margin-bottom:2rem;}
+/* bottom buttons inside stage */
+.cong-btns{display:flex;gap:.875rem;justify-content:center;pointer-events:all;flex-wrap:wrap;}
+
+/* ─── INVESTIGACION ─────── */
+.inv-sec{padding:clamp(4rem,7vw,7rem) 0;background:var(--white);}
+.inv-grid{display:grid;grid-template-columns:repeat(3,1fr);}
+.inv-card{padding:2.5rem 2rem;cursor:pointer;transition:background .22s;border-right:1px solid rgba(30,37,80,.07);position:relative;}
+.inv-card:last-child{border-right:none;}
+.inv-card:hover{background:var(--offwhite);}
+.inv-num{font-size:3.5rem;font-weight:900;letter-spacing:-.05em;color:rgba(30,37,80,.08);line-height:1;margin-bottom:.75rem;transition:color .3s;}
+.inv-card:hover .inv-num{color:rgba(212,43,43,.1);}
+.inv-title{font-size:.9375rem;font-weight:700;color:var(--navy);line-height:1.35;letter-spacing:-.01em;margin-bottom:.5rem;transition:color .2s;}
+.inv-card:hover .inv-title{color:var(--red);}
+.inv-desc{font-size:.8125rem;color:rgba(30,37,80,.52);line-height:1.72;margin-bottom:1.125rem;}
+.inv-link{font-size:.75rem;font-weight:600;color:var(--red);letter-spacing:.04em;text-transform:uppercase;display:flex;align-items:center;gap:.35rem;transition:gap .22s;}
+.inv-card:hover .inv-link{gap:.6rem;}
+
+/* ─── POSGRADO ─────────── */
+.posg-sec{padding:clamp(4rem,7vw,7rem) 0;background:var(--offwhite);}
+.posg-layout{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+.posg-left{padding-right:clamp(2rem,4vw,4rem);border-right:1px solid rgba(30,37,80,.08);}
+.posg-h{font-size:clamp(2rem,4vw,3.5rem);font-weight:800;letter-spacing:-.035em;line-height:.92;color:var(--navy);margin-bottom:1.25rem;}
+.posg-h em{font-style:normal;color:var(--red);}
+.posg-body{font-size:.9375rem;color:rgba(30,37,80,.54);line-height:1.75;margin-bottom:1.75rem;max-width:440px;}
+.posg-stats{display:flex;gap:2.25rem;padding-top:1.5rem;border-top:1px solid rgba(30,37,80,.08);margin-bottom:2rem;}
+.pst-n{font-size:2.125rem;font-weight:800;letter-spacing:-.05em;color:var(--navy);line-height:1;margin-bottom:.18rem;}
+.pst-n em{font-style:normal;color:var(--red);}
+.pst-d{font-size:.75rem;color:rgba(30,37,80,.38);font-weight:500;}
+.posg-right{padding-left:clamp(2rem,4vw,4rem);}
+.posg-cards{display:flex;flex-direction:column;}
+.pc{display:flex;align-items:center;gap:1.125rem;padding:1.25rem 0;border-bottom:1px solid rgba(30,37,80,.07);cursor:pointer;transition:background .2s;position:relative;overflow:hidden;text-decoration:none;}
+.pc::before{content:'';position:absolute;left:0;top:50%;width:2px;height:0;background:var(--red);transform:translateY(-50%);transition:height .3s var(--ease-out);}
+.pc:hover::before{height:60%;}
+.pc-icon{width:40px;height:40px;background:rgba(30,37,80,.06);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .22s;}
+.pc-icon svg{width:18px;height:18px;stroke:var(--navy);fill:none;transition:stroke .22s;}
+.pc:hover .pc-icon{background:var(--navy);}
+.pc:hover .pc-icon svg{stroke:#fff;}
+.pc-title{font-size:.9375rem;font-weight:600;color:var(--navy);letter-spacing:-.01em;flex:1;transition:color .22s;}
+.pc:hover .pc-title{color:var(--red);}
+.pc-count{font-size:.75rem;font-weight:600;color:rgba(30,37,80,.32);}
+.pc-arr{width:26px;height:26px;border:1px solid rgba(30,37,80,.12);display:flex;align-items:center;justify-content:center;transition:all .22s;}
+.pc-arr svg{width:11px;height:11px;stroke:rgba(30,37,80,.3);fill:none;transition:stroke .22s;}
+.pc:hover .pc-arr{background:var(--red);border-color:var(--red);}
+.pc:hover .pc-arr svg{stroke:#fff;}
+
+/* ─── CLINICA ─────────────── */
+.clinica-sec{background:var(--white);}
+.clinica-inner{display:grid;grid-template-columns:1fr 1fr;}
+.cl-left{background:var(--navy);padding:clamp(3rem,6vw,6rem) clamp(2rem,4vw,4rem);display:flex;flex-direction:column;justify-content:flex-start;gap:1.5rem;}
+.cl-right{padding:clamp(3rem,6vw,6rem) clamp(2rem,4vw,4rem);display:flex;flex-direction:column;gap:1.5rem;border-left:1px solid rgba(30,37,80,.08);}
+.cl-title{font-size:clamp(1.75rem,3.5vw,3rem);font-weight:800;letter-spacing:-.035em;line-height:.92;color:#fff;margin-bottom:1.25rem;}
+.cl-title em{font-style:normal;color:var(--red);}
+.cl-body{font-size:.9375rem;color:rgba(255,255,255,.52);line-height:1.72;max-width:400px;}
+/* specialty whatsapp buttons grid */
+.cl-spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+.cl-spec-btn{display:flex;align-items:center;gap:.75rem;padding:1rem 1rem;border:1px solid rgba(30,37,80,.07);cursor:pointer;text-decoration:none;transition:background .2s,border-color .2s;position:relative;}
+.cl-spec-btn:hover{background:var(--offwhite);border-color:rgba(30,37,80,.15);}
+.cl-spec-btn:hover .cl-spec-name{color:var(--red);}
+.cl-spec-icon{width:30px;height:30px;background:rgba(37,211,102,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.cl-spec-icon svg{width:15px;height:15px;fill:#25D366;}
+.cl-spec-name{font-size:.8125rem;font-weight:600;color:var(--navy);line-height:1.25;transition:color .2s;}
+.cl-spec-arr{margin-left:auto;opacity:.3;flex-shrink:0;}
+.cl-spec-arr svg{width:12px;height:12px;stroke:var(--navy);fill:none;}
+/* horario block */
+.cl-horario{padding:1.5rem;border:1px solid rgba(30,37,80,.08);}
+.cl-horario-lbl{font-size:.6rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(30,37,80,.38);margin-bottom:.5rem;}
+.cl-horario-val{font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.25rem;}
+.cl-horario-sub{font-size:.875rem;color:rgba(30,37,80,.5);}
+
+/* ─── INSTITUCIONAL ─────── */
+.inst-sec{padding:clamp(4rem,7vw,7rem) 0;background:var(--navy);position:relative;overflow:hidden;}
+.inst-bg-n{position:absolute;right:-1rem;bottom:-4rem;font-size:clamp(12rem,25vw,26rem);font-weight:900;letter-spacing:-.06em;color:rgba(255,255,255,.02);line-height:1;user-select:none;pointer-events:none;}
+.inst-grid{display:grid;grid-template-columns:repeat(3,1fr);position:relative;z-index:1;}
+.ib{padding:2.5rem 2.25rem;border-right:1px solid rgba(255,255,255,.06);}
+.ib:last-child{border-right:none;}
+.ib-num{font-size:3.5rem;font-weight:900;letter-spacing:-.05em;color:var(--red);line-height:1;margin-bottom:.35rem;}
+.ib-lbl{font-size:.6875rem;font-weight:600;color:rgba(255,255,255,.28);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;}
+.ib-txt{font-size:.9375rem;color:rgba(255,255,255,.45);line-height:1.72;border-top:1px solid rgba(255,255,255,.06);padding-top:1rem;}
+.inst-bottom{margin-top:4rem;padding-top:2.5rem;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;align-items:center;gap:2rem;position:relative;z-index:1;}
+.inst-bottom-h{font-size:clamp(1.5rem,3vw,2.75rem);font-weight:800;letter-spacing:-.035em;color:#fff;line-height:1.08;max-width:540px;}
+.inst-bottom-h em{font-style:normal;color:var(--red);}
+.inst-actions{display:flex;flex-direction:column;gap:.75rem;align-items:flex-start;}
+
+/* ─── EXTENSION ─────────── */
+.ext-sec{padding:clamp(4rem,7vw,7rem) 0;background:var(--white);}
+.ext-grid{display:grid;grid-template-columns:repeat(4,1fr);}
+.ext-card{padding:2rem;position:relative;overflow:hidden;cursor:pointer;transition:filter .22s;}
+.ext-card:nth-child(1){background:var(--navy);}
+.ext-card:nth-child(2){background:var(--offwhite);}
+.ext-card:nth-child(3){background:var(--red);}
+.ext-card:nth-child(4){background:var(--white);border:1px solid rgba(30,37,80,.07);}
+.ext-card:hover{filter:brightness(.95);}
+.ext-card:nth-child(1):hover,.ext-card:nth-child(3):hover{filter:brightness(1.05);}
+.ext-n{font-size:.6rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;margin-bottom:1.5rem;}
+.ext-card:nth-child(1) .ext-n,.ext-card:nth-child(3) .ext-n{color:rgba(255,255,255,.45);}
+.ext-card:nth-child(2) .ext-n,.ext-card:nth-child(4) .ext-n{color:rgba(30,37,80,.38);}
+.ext-title{font-size:1.125rem;font-weight:700;line-height:1.25;letter-spacing:-.02em;margin-bottom:.75rem;}
+.ext-card:nth-child(1) .ext-title,.ext-card:nth-child(3) .ext-title{color:#fff;}
+.ext-card:nth-child(2) .ext-title,.ext-card:nth-child(4) .ext-title{color:var(--navy);}
+.ext-desc{font-size:.8125rem;line-height:1.65;margin-bottom:1.5rem;}
+.ext-card:nth-child(1) .ext-desc,.ext-card:nth-child(3) .ext-desc{color:rgba(255,255,255,.5);}
+.ext-card:nth-child(2) .ext-desc,.ext-card:nth-child(4) .ext-desc{color:rgba(30,37,80,.5);}
+.ext-arrow{width:34px;height:34px;display:flex;align-items:center;justify-content:center;}
+.ext-card:nth-child(1) .ext-arrow,.ext-card:nth-child(3) .ext-arrow{background:rgba(255,255,255,.12);}
+.ext-card:nth-child(2) .ext-arrow,.ext-card:nth-child(4) .ext-arrow{background:rgba(30,37,80,.07);}
+.ext-arrow svg{width:16px;height:16px;stroke:currentColor;fill:none;}
+.ext-card:nth-child(1) .ext-arrow svg,.ext-card:nth-child(3) .ext-arrow svg{stroke:rgba(255,255,255,.7);}
+.ext-card:nth-child(2) .ext-arrow svg,.ext-card:nth-child(4) .ext-arrow svg{stroke:rgba(30,37,80,.4);}
+
+/* ─── FOOTER ─────────────── */
+.footer{background:var(--navy);padding:4rem 0 2rem;}
+.ft{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;padding-bottom:3rem;border-bottom:1px solid rgba(255,255,255,.06);}
+.fb-logo{display:flex;align-items:center;gap:.875rem;margin-bottom:1.25rem;}
+.fb-logo-img{height:40px;width:40px;object-fit:contain;}
+.fb-name{font-size:.875rem;font-weight:700;color:#fff;letter-spacing:.02em;}
+.fb-uba{font-size:.6rem;color:rgba(255,255,255,.28);letter-spacing:.08em;}
+.fb-desc{font-size:.8125rem;color:rgba(255,255,255,.35);line-height:1.72;margin-bottom:1.25rem;max-width:290px;}
+.fb-addr{font-size:.75rem;color:rgba(255,255,255,.25);line-height:1.65;}
+.fc-title{font-size:.6875rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:1.125rem;}
+.fc ul{display:flex;flex-direction:column;gap:.625rem;}
+.fc ul a{font-size:.8125rem;color:rgba(255,255,255,.42);transition:color .2s;}
+.fc ul a:hover{color:#fff;}
+.fb-btm{display:flex;justify-content:space-between;align-items:center;padding-top:1.75rem;gap:1rem;flex-wrap:wrap;}
+.fb-copy{font-size:.75rem;color:rgba(255,255,255,.2);}
+.socials{display:flex;gap:.625rem;}
+.soc{width:32px;height:32px;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;transition:all .22s;color:rgba(255,255,255,.3);}
+.soc:hover{border-color:rgba(255,255,255,.28);color:#fff;background:rgba(255,255,255,.05);}
+.soc svg{width:13px;height:13px;stroke:currentColor;fill:none;}
+.sticky-cta{display:none;position:fixed;bottom:1.25rem;left:50%;transform:translateX(-50%);z-index:80;background:var(--navy);color:#fff;padding:.875rem 2rem;font-size:.875rem;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,.28);white-space:nowrap;transition:background .22s,transform .22s;font-family:inherit;}
+.sticky-cta:hover{background:var(--red);transform:translateX(-50%) translateY(-2px);}
+
+/* ─── RESPONSIVE ─────────── */
+@media(max-width:1200px){
+  .acc-grid{grid-template-columns:repeat(3,1fr);}
+  .acc-item:nth-child(3){border-right:none;}
+  .acc-item:nth-child(4),.acc-item:nth-child(5),.acc-item:nth-child(6){border-top:1px solid rgba(30,37,80,.07);}
+  .acc-item:nth-child(6){border-right:none;}
+  .inst-grid{grid-template-columns:1fr 1fr;}
+  .ft{grid-template-columns:1fr 1fr;}
+  .ext-grid{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:1024px){
+  .nav-links{display:none;}
+  .ham{display:flex;}
+  .mob-nav{display:flex;}
+  .hero-text-inner{grid-template-columns:1fr;}
+  .hero-aside{display:none;}
+  .news-grid{grid-template-columns:1fr;}
+  .news-feat{min-height:320px;}
+  .news-side{border-left:none;border-top:1px solid rgba(30,37,80,.07);}
+  .news-twitter{border-left:none;border-top:1px solid rgba(30,37,80,.07);min-height:400px;}
+  .ev-grid{grid-template-columns:1fr 1fr;}
+  .inv-grid{grid-template-columns:1fr 1fr;}
+  .posg-layout{grid-template-columns:1fr;}
+  .posg-left{padding-right:0;border-right:none;border-bottom:1px solid rgba(30,37,80,.08);padding-bottom:2.5rem;margin-bottom:2.5rem;}
+  .posg-right{padding-left:0;}
+  .clinica-inner{grid-template-columns:1fr;}
+  .cl-right{border-left:none;border-top:1px solid rgba(30,37,80,.08);}
+  .inst-bottom{flex-direction:column;align-items:flex-start;}
+  .cong-banner-inner{grid-template-columns:1fr;}
+}
+@media(max-width:768px){
+  :root{--pad-x:1.25rem;}
+  .ev-grid{grid-template-columns:1fr;}
+  .ev-card{border-right:none;border-bottom:1px solid rgba(255,255,255,.06);}
+  .inv-grid{grid-template-columns:1fr;}
+  .inv-card{border-right:none;border-bottom:1px solid rgba(30,37,80,.07);}
+  .inst-grid{grid-template-columns:1fr;}
+  .ib{border-right:none;border-bottom:1px solid rgba(255,255,255,.06);}
+  .ib:last-child{border-bottom:none;}
+  .ft{grid-template-columns:1fr;}
+  .cong-stage{height:400px;}
+  .fl1,.fl3{display:none;}
+  .fl2{width:230px;top:50%;left:50%;rotate:0deg;transform:translate(-50%,-50%);}
+  .sticky-cta{display:flex;}
+  .sh{flex-direction:column;align-items:flex-start;}
+  .ext-grid{grid-template-columns:1fr 1fr;}
+  .cb-info-grid{grid-template-columns:1fr;}
+  .cl-spec-grid{grid-template-columns:1fr;}
+}
+@media(max-width:480px){
+  .acc-grid{grid-template-columns:repeat(2,1fr);}
+  .acc-item:nth-child(2){border-right:none;}
+  .acc-item:nth-child(3){border-right:1px solid rgba(30,37,80,.07);}
+  .acc-item:nth-child(4),.acc-item:nth-child(5),.acc-item:nth-child(6){border-top:1px solid rgba(30,37,80,.07);}
+  .acc-item:nth-child(4),.acc-item:nth-child(6){border-right:none;}
+  .posg-stats{flex-direction:column;gap:1.25rem;}
+  .ext-grid{grid-template-columns:1fr;}
+  .stats-row{flex-direction:column;gap:1rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- MOBILE NAV -->
+<nav class="mob-nav" id="mobNav">
+  <a href="#">Facultad</a>
+  <a href="#">Grado</a>
+  <a href="#">Posgrado</a>
+  <a href="#">Investigación</a>
+  <a href="#">Extensión</a>
+  <a href="#clinica">Clínica</a>
+  <a href="#">Noticias</a>
+</nav>
+
+<!-- HEADER -->
+<header class="hdr" id="hdr">
+  <div class="nav">
+    <a href="#" class="logo">
+      <img src="Copia_de_FO_UBAtransparente.png" alt="FOUBA – Facultad de Odontología UBA" class="logo-img">
+      <div class="logo-text-wrap">
+        <span class="logo-fouba">FOUBA</span>
+        <span class="logo-sub">Odontología · UBA</span>
+      </div>
+    </a>
+    <nav class="nav-links">
+      <a href="#">Facultad</a>
+      <a href="#">Grado</a>
+      <a href="#">Posgrado</a>
+      <a href="#">Investigación</a>
+      <a href="#">Extensión</a>
+      <a href="#clinica">Clínica</a>
+      <a href="#">Noticias</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="#" class="btn btn-ol-w" style="display:none;" id="navIngresar">Ingresar</a>
+      <a href="#clinica" class="btn btn-r">Turnos Clínica</a>
+      <button class="ham" id="hamBtn" aria-label="Menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- HERO: SCROLL-PINNED — video fades to ghost, text reveals in sequence -->
+<!-- .hero-pin-wrap is the tall scroll spacer that creates the "pinned" time -->
+<div class="hero-pin-wrap" id="heroPinWrap">
+  <div class="hero-sticky" id="heroSection">
+
+    <!-- Video layer — fades from full to ghost opacity as scroll progresses -->
+    <div class="hero-video-wrap" id="heroVideoWrap">
+      <video autoplay muted loop playsinline id="heroVideo">
+        <source src="VIDEO_WEB_FOUBA_2_v3.mp4" type="video/mp4">
+      </video>
+      <div class="hero-video-ov"></div>
+    </div>
+
+    <!-- Gradient bottom — always present -->
+    <div class="hero-grad-btm"></div>
+
+    <!-- Text layer — children animate in when .revealed is added -->
+    <div class="hero-text-layer" id="heroTextLayer">
+      <div class="hero-text-inner">
+        <div>
+          <div class="hero-eyebrow">
+            <div class="dot"></div>
+            <span class="eyebrow-txt">Fundada en 1941 · Buenos Aires, Argentina</span>
+          </div>
+          <h1 class="hero-h1">Formando<br>el futuro<br>de la <em>salud</em><br>bucal</h1>
+          <p class="hero-p">La Facultad de Odontología de la UBA es una de las instituciones académicas en salud más importantes de América Latina. Excelencia pública, investigación de vanguardia y compromiso social desde 1941.</p>
+          <div class="hero-ctas">
+            <a href="#" class="btn btn-r">Oferta académica</a>
+            <a href="#clinica" class="btn btn-ol-w">Clínica</a>
+            <a href="#" class="btn btn-ol-w">Ingresar al SIU</a>
+          </div>
+        </div>
+        <aside class="hero-aside">
+          <div class="glass-panel">
+            <p class="gp-lbl">FOUBA en números</p>
+            <div class="stats-row">
+              <div><div class="stat-n">30<span>K+</span></div><div class="stat-d">Estudiantes activos</div></div>
+              <div><div class="stat-n">80<span>+</span></div><div class="stat-d">Años de historia</div></div>
+            </div>
+            <p class="ev-nxt-lbl">Próximo evento destacado</p>
+            <div class="ev-item">
+              <div class="ev-date-box"><div class="ev-day">21</div><div class="ev-mon">OCT</div></div>
+              <div>
+                <div class="ev-ti">Congreso 80 Años FOUBA</div>
+                <div class="ev-su">21 al 23 de octubre de 2026 · FOUBA</div>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- Scroll hint — fades out as soon as user starts scrolling -->
+    <div class="scroll-hint" id="scrollHint">
+      <span>Scroll</span>
+      <div class="scroll-ring"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+    </div>
+
+  </div><!-- /.hero-sticky -->
+</div><!-- /.hero-pin-wrap -->
+
+<!-- TICKER -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span class="t-item hi">Inscripciones abiertas · Ciclo 2026</span><span class="t-sep"></span>
+    <span class="t-item">Congreso 80 Años FOUBA · 21–23 Oct 2026</span><span class="t-sep"></span>
+    <span class="t-item hi">Becas UBACYT · Convocatoria abierta</span><span class="t-sep"></span>
+    <span class="t-item">Endotrauma · 2 y 3 de Julio 2026 · FOUBA</span><span class="t-sep"></span>
+    <span class="t-item hi">Ranking QS 2025 · Top 150 Odontología LATAM</span><span class="t-sep"></span>
+    <span class="t-item">Egresados 2025 · Inicio trámite del Título · Dic 12</span><span class="t-sep"></span>
+    <span class="t-item hi">Inscripciones abiertas · Ciclo 2026</span><span class="t-sep"></span>
+    <span class="t-item">Congreso 80 Años FOUBA · 21–23 Oct 2026</span><span class="t-sep"></span>
+    <span class="t-item hi">Becas UBACYT · Convocatoria abierta</span><span class="t-sep"></span>
+    <span class="t-item">Endotrauma · 2 y 3 de Julio 2026 · FOUBA</span><span class="t-sep"></span>
+    <span class="t-item hi">Ranking QS 2025 · Top 150 Odontología LATAM</span><span class="t-sep"></span>
+    <span class="t-item">Egresados 2025 · Inicio trámite del Título · Dic 12</span><span class="t-sep"></span>
+  </div>
+</div>
+
+<!-- ACCESOS RÁPIDOS -->
+<section class="accesos">
+  <div class="wrap">
+    <div class="acc-grid">
+      <a href="#" class="acc-item rv d1"><div class="acc-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><span class="acc-name">SIU Guaraní<br>Alumnos</span></a>
+      <a href="#clinica" class="acc-item rv d2"><div class="acc-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><span class="acc-name">Turnos<br>Clínica</span></a>
+      <a href="http://odontologia.uba.ar/?page_id=8218" target="_blank" class="acc-item rv d3"><div class="acc-icon"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><span class="acc-name">Biblioteca<br>Digital</span></a>
+      <a href="#" class="acc-item rv d1"><div class="acc-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg></div><span class="acc-name">Campus<br>Virtual</span></a>
+      <a href="#" class="acc-item rv d2"><div class="acc-icon"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span class="acc-name">Posgrado<br>&amp; Especialidades</span></a>
+      <a href="#" class="acc-item rv d3"><div class="acc-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.8A16 16 0 0 0 16 16.89l.88-.88a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><span class="acc-name">Contacto<br>&amp; Consultas</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- BANNER CONGRESO 80 AÑOS -->
+<section class="cong-banner">
+  <div class="cong-banner-inner">
+    <div class="cb-left rv">
+      <div>
+        <p class="cb-eyebrow">Congreso Institucional · Inscripción abierta · 2026</p>
+        <h2 class="cb-title">Congreso<br>80 Años<br>FOUBA</h2>
+        <p class="cb-desc">Un congreso histórico que celebra ocho décadas de excelencia académica, investigación y compromiso con la salud bucal de los argentinos. Tres días de ciencia, clínica y comunidad odontológica.</p>
+        <div class="cb-ctas">
+          <a href="https://jornadas.odontologia.uba.ar/preinscripcion/" target="_blank" class="btn btn-wh">Pre inscripción al Congreso</a>
+          <a href="https://jornadas.odontologia.uba.ar/" target="_blank" class="btn btn-ol-w">Congreso 80 años</a>
+        </div>
+      </div>
+    </div>
+    <div class="cb-right rv d2">
+      <!-- Jornadas logo as watermark -->
+      <img src="jornadas.svg" alt="" class="cb-right-logo" aria-hidden="true">
+      <p class="cb-right-label">Información del evento</p>
+      <div class="cb-info-grid">
+        <div class="cb-info-item">
+          <div class="cb-info-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <div class="cb-info-val">21–23 Octubre</div>
+          <div class="cb-info-key">Fecha del evento · 2026</div>
+        </div>
+        <div class="cb-info-item">
+          <div class="cb-info-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div class="cb-info-val">FOUBA</div>
+          <div class="cb-info-key">Facultad de Odontología · UBA</div>
+        </div>
+        <div class="cb-info-item">
+          <div class="cb-info-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <div class="cb-info-val">80 Años</div>
+          <div class="cb-info-key">Aniversario institucional</div>
+        </div>
+        <div class="cb-info-item">
+          <div class="cb-info-icon"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+          <div class="cb-info-val">Expositores</div>
+          <div class="cb-info-key">Nacionales e internacionales</div>
+        </div>
+      </div>
+      <div class="cb-cta-row">
+        <a href="https://jornadas.odontologia.uba.ar/preinscripcion/" target="_blank" class="btn btn-r">Pre inscripción</a>
+        <a href="https://jornadas.odontologia.uba.ar/" target="_blank" class="btn btn-ol-w">Ver sitio del congreso</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NOTICIAS / ACTUALIDAD -->
+<section class="noticias">
+  <div class="wrap">
+    <div class="sh rv">
+      <div class="sh-l">
+        <div class="sh-tag"><span class="sh-line"></span><span class="lbl">Noticias</span></div>
+        <h2 class="sec-h">Actualidad<br><em>FOUBA</em></h2>
+      </div>
+      <a href="#" class="sh-link">Ver todas las noticias <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+    <div class="news-grid">
+      <!-- 4 noticias reales -->
+      <aside class="news-side">
+        <a href="#" class="news-row rv">
+          <div class="news-thumb"><div class="news-thumb-img" style="background:var(--navy);width:100%;height:100%;"></div></div>
+          <div>
+            <span class="tag-n" style="display:inline-block;margin-bottom:.35rem;">Docentes</span>
+            <h4 class="nr-title">Convocatoria abierta UBAINTdocentes 2026. Segundo llamado</h4>
+            <p class="nr-meta">Abril 17, 2026</p>
+          </div>
+        </a>
+        <a href="#" class="news-row rv d1">
+          <div class="news-thumb"><div class="news-thumb-img" style="background:linear-gradient(135deg,#8b1a1a,#D42B2B);width:100%;height:100%;"></div></div>
+          <div>
+            <span class="tag-r" style="display:inline-block;margin-bottom:.35rem;">Grado</span>
+            <h4 class="nr-title">Inscripción a Cursos Optativos 1° Semestre 2026 + Viajes</h4>
+            <p class="nr-meta">Marzo 12, 2026</p>
+          </div>
+        </a>
+        <a href="#" class="news-row rv d2">
+          <div class="news-thumb"><div class="news-thumb-img" style="background:linear-gradient(135deg,#060916,#1E2550);width:100%;height:100%;"></div></div>
+          <div>
+            <span class="tag-g" style="display:inline-block;margin-bottom:.35rem;">Exámenes</span>
+            <h4 class="nr-title">Inscripción Exámenes Libres Agosto 2026</h4>
+            <p class="nr-meta">Mayo 6, 2026</p>
+          </div>
+        </a>
+        <a href="#" class="news-row rv d3">
+          <div class="news-thumb"><div class="news-thumb-img" style="background:linear-gradient(135deg,#1E2550,#D42B2B);width:100%;height:100%;"></div></div>
+          <div>
+            <span class="tag-n" style="display:inline-block;margin-bottom:.35rem;">Egresados</span>
+            <h4 class="nr-title">EGRESADOS 2025: Inicio trámite del Título</h4>
+            <p class="nr-meta">Diciembre 12, 2025</p>
+          </div>
+        </a>
+      </aside>
+
+      <!-- Twitter/X feed — dark look como la imagen de referencia -->
+      <div class="news-twitter rv d4">
+        <div class="tw-header">
+          <div class="tw-header-left">
+            <div class="tw-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </div>
+            <div>
+              <div class="tw-label">FOUBA</div>
+              <div class="tw-handle">@odontouba</div>
+            </div>
+          </div>
+          <a href="https://twitter.com/odontouba" target="_blank" rel="noopener" class="tw-follow">Seguir</a>
+        </div>
+        <div class="tw-feed">
+          <a class="twitter-timeline"
+             href="https://twitter.com/odontouba"
+             data-tweet-limit="6"
+             data-chrome="noheader nofooter noborders"
+             data-theme="dark"
+             style="width:100%;">
+            <div style="padding:2rem;text-align:center;">
+              <p style="font-size:.8125rem;color:rgba(255,255,255,.4);line-height:1.55;">Cargando publicaciones de<br><strong style="color:#fff;">@odontouba</strong></p>
+            </div>
+          </a>
+        </div>
+        <div class="tw-footer">
+          <a href="https://twitter.com/odontouba" target="_blank" rel="noopener">
+            Ver todas las publicaciones
+            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- EVENTOS -->
+<section class="eventos">
+  <div class="wrap">
+    <div class="sh rv">
+      <div class="sh-l">
+        <div class="sh-tag"><span class="sh-line"></span><span class="lbl lbl-lt">Agenda académica</span></div>
+        <h2 class="sec-h sec-h-lt">Próximos<br><em>eventos</em></h2>
+      </div>
+      <a href="#" class="sh-link sh-link-lt">Agenda completa <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+    <div class="ev-grid">
+      <article class="ev-card rv">
+        <div class="ev-dr"><span class="ev-big-d">2</span><div class="ev-mn-yr"><span class="ev-m">Jul</span><span class="ev-y">2026</span></div></div>
+        <p class="ev-cat">Jornada · Presencial · 2 días</p>
+        <h3 class="ev-ti">Endotrauma</h3>
+        <p class="ev-de">Jornada científica dedicada al abordaje diagnóstico y terapéutico del trauma dental en sus distintas presentaciones clínicas.</p>
+        <div class="ev-ft"><span class="ev-loc"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>FOUBA · Buenos Aires</span><div class="ev-arr"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div></div>
+      </article>
+      <article class="ev-card rv d2">
+        <div class="ev-dr"><span class="ev-big-d">21</span><div class="ev-mn-yr"><span class="ev-m">Oct</span><span class="ev-y">2026</span></div></div>
+        <p class="ev-cat">Congreso · Presencial · 3 días</p>
+        <h3 class="ev-ti">Congreso 80 Años FOUBA</h3>
+        <p class="ev-de">El congreso que celebra ocho décadas de la Facultad. Conferencias magistrales, talleres clínicos, workshops y exposición comercial.</p>
+        <div class="ev-ft"><span class="ev-loc"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>FOUBA · Buenos Aires</span><div class="ev-arr"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div></div>
+      </article>
+      <article class="ev-card rv d3">
+        <div class="ev-dr"><span class="ev-big-d">5</span><div class="ev-mn-yr"><span class="ev-m">Jul</span><span class="ev-y">2026</span></div></div>
+        <p class="ev-cat">Simposio · Online</p>
+        <h3 class="ev-ti">Simposio Internacional de Implantología Oral Avanzada</h3>
+        <p class="ev-de">Especialistas de LATAM y Europa presentan los últimos avances en regeneración ósea e implantología digital guiada.</p>
+        <div class="ev-ft"><span class="ev-loc"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Virtual · Zoom</span><div class="ev-arr"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- CENTRO DE RECURSOS -->
+<section class="cong-sec">
+  <div class="wrap">
+    <div class="sh rv">
+      <div class="sh-l">
+        <div class="sh-tag"><span class="sh-line"></span><span class="lbl">Acceso al conocimiento</span></div>
+        <h2 class="sec-h">Centro de<br><em>Recursos</em></h2>
+      </div>
+    </div>
+    <div class="cong-stage" id="congStage">
+      <!-- logo jornadas como watermark de fondo -->
+      <div class="cong-bg-logo">
+        <img src="jornadas.svg" alt="">
+      </div>
+
+      <!-- Card 1: Repositorio -->
+      <div class="cong-layer fl1" data-spd="-0.4">
+        <a href="https://repositorio.odontologia.uba.ar/" target="_blank" class="res-card" style="background:var(--red);">
+          <div class="res-inner">
+            <p class="res-lbl">Acceso abierto</p>
+            <p class="res-title">Repositorio<br>Institucional</p>
+            <p class="res-sub">Publicaciones, tesis y producción científica de FOUBA</p>
+            <div class="res-arrow">Acceder <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Card 2: Museo -->
+      <div class="cong-layer fl2" data-spd="0.15">
+        <a href="http://odontologia.uba.ar/?page_id=18771" target="_blank" class="res-card" style="background:var(--navy);border:1px solid rgba(255,255,255,.1);">
+          <div class="res-inner" style="padding:2.25rem;">
+            <p class="res-lbl">Patrimonio histórico</p>
+            <p class="res-title" style="font-size:1.5rem;">Museo<br>FOUBA</p>
+            <p class="res-sub">Historia, colecciones e identidad de la Facultad</p>
+            <div class="res-arrow">Acceder <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Card 3: Biblioteca -->
+      <div class="cong-layer fl3" data-spd="-0.25">
+        <a href="http://odontologia.uba.ar/?page_id=8218" target="_blank" class="res-card" style="background:rgba(30,37,80,.85);border:1px solid rgba(255,255,255,.07);">
+          <div class="res-inner">
+            <p class="res-lbl">Recursos académicos</p>
+            <p class="res-title">Biblioteca<br>Digital</p>
+            <p class="res-sub">Acceso a bases de datos, revistas y material de estudio</p>
+            <div class="res-arrow">Acceder <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </div>
+        </a>
+      </div>
+
+      <div class="cong-center">
+        <h2>Centro de<br><em>Recursos</em></h2>
+        <p>Repositorio, Museo y Biblioteca al servicio de la comunidad académica y la sociedad</p>
+        <div class="cong-btns">
+          <a href="http://odontologia.uba.ar/?page_id=12651" target="_blank" class="btn btn-r">Galería de Videos</a>
+          <a href="http://odontologia.uba.ar/?page_id=3011" target="_blank" class="btn btn-ol-w">Recursos del Congreso</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INVESTIGACIÓN -->
+<section class="inv-sec">
+  <div class="wrap">
+    <div class="sh rv">
+      <div class="sh-l">
+        <div class="sh-tag"><span class="sh-line"></span><span class="lbl">Ciencia &amp; Conocimiento</span></div>
+        <h2 class="sec-h">Investigación<br><em>de frontera</em></h2>
+      </div>
+      <a href="#" class="sh-link">Ver todos los proyectos <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+    <div class="inv-grid">
+      <article class="inv-card rv"><div class="inv-num">01</div><h3 class="inv-title">Biomateriales y Nanotecnología Odontológica</h3><p class="inv-desc">Desarrollo de materiales restauradores con propiedades antibacterianas y remineralizadoras basadas en nanopartículas de hidroxiapatita y vidrio bioactivo.</p><span class="inv-link">Ver proyecto <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></article>
+      <article class="inv-card rv d2"><div class="inv-num">02</div><h3 class="inv-title">Enfermedad Periodontal y Enfermedades Sistémicas</h3><p class="inv-desc">Investigación traslacional sobre la relación entre inflamación periodontal y condiciones sistémicas como diabetes, embarazo y enfermedades cardiovasculares.</p><span class="inv-link">Ver proyecto <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></article>
+      <article class="inv-card rv d3"><div class="inv-num">03</div><h3 class="inv-title">Odontología Digital e Impresión 3D</h3><p class="inv-desc">Integración de tecnologías CAD/CAM, escaneado intraoral e impresión 3D en protocolos clínicos de rehabilitación oral compleja de pacientes adultos mayores.</p><span class="inv-link">Ver proyecto <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></article>
+    </div>
+  </div>
+</section>
+
+<!-- POSGRADO -->
+<section class="posg-sec">
+  <div class="wrap">
+    <div class="posg-layout">
+      <div class="posg-left rl">
+        <div class="sh-tag" style="margin-bottom:1.25rem;"><span class="sh-line"></span><span class="lbl">Formación avanzada · CONEAU</span></div>
+        <h2 class="posg-h">Especialidades<br>&amp; <em>Posgrado</em></h2>
+        <p class="posg-body">FOUBA ofrece una de las carteras de posgrado más completas de la región. Desde especializaciones reconocidas por CONEAU hasta doctorados de investigación, diseñadas para el profesional que quiere ir más lejos.</p>
+        <div class="posg-stats">
+          <div><div class="pst-n">18<em>+</em></div><div class="pst-d">Especialidades acreditadas</div></div>
+          <div><div class="pst-n">600<em>+</em></div><div class="pst-d">Graduados por año</div></div>
+          <div><div class="pst-n">92<em>%</em></div><div class="pst-d">Inserción laboral</div></div>
+        </div>
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap;">
+          <a href="#" class="btn btn-n">Ver toda la oferta</a>
+          <a href="#" class="btn btn-ol-n">Preinscripción</a>
+        </div>
+      </div>
+      <div class="posg-right rr">
+        <div class="posg-cards">
+          <a href="#" class="pc"><div class="pc-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg></div><span class="pc-title">Ortodoncia y Ortopedia</span><span class="pc-count">3 carreras</span><div class="pc-arr"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div></a>
+          <a href="#" class="pc"><div class="pc-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><span class="pc-title">Implantología Oral</span><span class="pc-count">2 carreras</span><div class="pc-arr"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div></a>
+          <a href="#" class="pc"><div class="pc-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><span class="pc-title">Periodoncia</span><span class="pc-count">2 carreras</span><div class="pc-arr"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div></a>
+          <a href="#" class="pc"><div class="pc-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><span class="pc-title">Cirugía Oral y Maxilofacial</span><span class="pc-count">2 carreras</span><div class="pc-arr"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div></a>
+          <a href="#" class="pc"><div class="pc-icon"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><span class="pc-title">Endodoncia</span><span class="pc-count">2 carreras</span><div class="pc-arr"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div></a>
+          <a href="#" class="pc"><div class="pc-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><span class="pc-title">Doctorado en Odontología</span><span class="pc-count">1 carrera</span><div class="pc-arr"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div></a>
+          <a href="#" class="pc"><div class="pc-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg></div><span class="pc-title">Ver todas las especialidades</span><span class="pc-count">18+ carreras</span><div class="pc-arr"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLÍNICA ODONTOLÓGICA -->
+<section class="clinica-sec" id="clinica">
+  <div class="clinica-inner">
+    <div class="cl-left rl">
+      <div class="sh-tag" style="margin-bottom:1.25rem;"><span class="sh-line"></span><span class="lbl lbl-lt">Atención a la comunidad</span></div>
+      <h2 class="cl-title">Clínica<br>Odontológica</h2>
+      <p class="cl-body">FOUBA brinda atención odontológica a la comunidad. Todos los tratamientos son realizados por alumnos avanzados bajo supervisión de docentes especializados. Un compromiso con la salud pública y el bien común.</p>
+    </div>
+    <div class="cl-right rr">
+      <div>
+        <div class="sh-tag" style="margin-bottom:1.25rem;"><span class="sh-line"></span><span class="lbl">Especialidades · Comunicación vía WhatsApp</span></div>
+        <div class="cl-spec-grid">
+          <a href="https://wa.me/5491100000001" target="_blank" class="cl-spec-btn">
+            <div class="cl-spec-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div>
+            <span class="cl-spec-name">Odontología General</span>
+            <div class="cl-spec-arr"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </a>
+          <a href="https://wa.me/5491100000002" target="_blank" class="cl-spec-btn">
+            <div class="cl-spec-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div>
+            <span class="cl-spec-name">Ortodoncia</span>
+            <div class="cl-spec-arr"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </a>
+          <a href="https://wa.me/5491100000003" target="_blank" class="cl-spec-btn">
+            <div class="cl-spec-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div>
+            <span class="cl-spec-name">Periodoncia</span>
+            <div class="cl-spec-arr"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </a>
+          <a href="https://wa.me/5491100000004" target="_blank" class="cl-spec-btn">
+            <div class="cl-spec-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div>
+            <span class="cl-spec-name">Cirugía Bucal</span>
+            <div class="cl-spec-arr"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </a>
+          <a href="https://wa.me/5491100000005" target="_blank" class="cl-spec-btn">
+            <div class="cl-spec-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div>
+            <span class="cl-spec-name">Endodoncia</span>
+            <div class="cl-spec-arr"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </a>
+          <a href="https://wa.me/5491100000006" target="_blank" class="cl-spec-btn">
+            <div class="cl-spec-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div>
+            <span class="cl-spec-name">Implantología</span>
+            <div class="cl-spec-arr"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </a>
+          <a href="https://wa.me/5491100000007" target="_blank" class="cl-spec-btn">
+            <div class="cl-spec-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div>
+            <span class="cl-spec-name">Odontopediatría</span>
+            <div class="cl-spec-arr"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </a>
+          <a href="https://wa.me/5491100000008" target="_blank" class="cl-spec-btn">
+            <div class="cl-spec-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div>
+            <span class="cl-spec-name">Rehabilitación Oral</span>
+            <div class="cl-spec-arr"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+          </a>
+        </div>
+      </div>
+      <div class="cl-horario">
+        <div class="cl-horario-lbl">Horario de atención</div>
+        <div class="cl-horario-val">Lunes a Viernes</div>
+        <div class="cl-horario-sub">8:00 – 19:00 hs &nbsp;·&nbsp; Marcelo T. de Alvear 2142, CABA</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXTENSIÓN -->
+<section class="ext-sec">
+  <div class="wrap">
+    <div class="sh rv">
+      <div class="sh-l">
+        <div class="sh-tag"><span class="sh-line"></span><span class="lbl">Compromiso social</span></div>
+        <h2 class="sec-h">Extensión<br><em>universitaria</em></h2>
+      </div>
+    </div>
+    <div class="ext-grid">
+      <a href="#" class="ext-card rv"><p class="ext-n">Programa activo</p><h3 class="ext-title">Salud Bucal en Barrios Vulnerables</h3><p class="ext-desc">Operativos móviles de atención en zonas de escaso acceso a la salud del AMBA y el GBA.</p><div class="ext-arrow"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div></a>
+      <a href="#" class="ext-card rv d1"><p class="ext-n">Educación preventiva</p><h3 class="ext-title">Salud Bucal en Escuelas Primarias</h3><p class="ext-desc">Programa de concientización y enseñanza de hábitos de higiene dental para niños de escuelas públicas de CABA.</p><div class="ext-arrow"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div></a>
+      <a href="#" class="ext-card rv d2"><p class="ext-n">Adultos mayores</p><h3 class="ext-title">Odontología Gerontológica Comunitaria</h3><p class="ext-desc">Atención y seguimiento odontológico para adultos mayores en hogares y centros de día municipales.</p><div class="ext-arrow"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div></a>
+      <a href="#" class="ext-card rv d3"><p class="ext-n">Red de voluntariado</p><h3 class="ext-title">Voluntariado Odontológico Internacional</h3><p class="ext-desc">Misiones de salud bucal en comunidades rurales de Latinoamérica junto a ONGs y organismos internacionales.</p><div class="ext-arrow"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div></a>
+    </div>
+  </div>
+</section>
+
+<!-- INSTITUCIONAL -->
+<section class="inst-sec">
+  <div class="wrap">
+    <div class="inst-grid">
+      <div class="ib rv"><div class="ib-num">1941</div><div class="ib-lbl">Año de Fundación</div><p class="ib-txt">Más de 80 años formando odontólogos comprometidos con la salud pública y la excelencia clínica. Una de las facultades de salud más importantes de Argentina.</p></div>
+      <div class="ib rv d2"><div class="ib-num">#1</div><div class="ib-lbl">En Argentina</div><p class="ib-txt">Reconocida como la mejor facultad de Odontología de Argentina por rankings nacionales e internacionales. Acreditada por CONEAU en máxima categoría.</p></div>
+      <div class="ib rv d3"><div class="ib-num">Libre</div><div class="ib-lbl">Acceso gratuito</div><p class="ib-txt">La educación pública, gratuita y de calidad es nuestro mayor compromiso. La UBA garantiza el acceso irrestricto a la universidad para todos los argentinos.</p></div>
+    </div>
+    <div class="inst-bottom rv">
+      <h2 class="inst-bottom-h">La salud bucal es un <em>derecho</em>,<br>no un privilegio.</h2>
+      <div class="inst-actions">
+        <a href="#" class="btn btn-r">Conocé la Facultad</a>
+        <a href="#" class="btn btn-ol-w" style="border-color:rgba(255,255,255,.18);color:rgba(255,255,255,.55);">Historia institucional →</a>
+      </div>
+    </div>
+  </div>
+  <div class="inst-bg-n">UBA</div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="ft">
+      <div>
+        <div class="fb-logo">
+          <img src="Copia_de_FO_UBAtransparente.png" alt="FOUBA" class="fb-logo-img">
+          <div><div class="fb-name">FOUBA</div><div class="fb-uba">Universidad de Buenos Aires</div></div>
+        </div>
+        <p class="fb-desc">Facultad de Odontología de la Universidad de Buenos Aires. Formando profesionales de la salud desde 1941, con compromiso social, excelencia académica y vocación científica.</p>
+        <address class="fb-addr" style="font-style:normal;">Marcelo T. de Alvear 2142<br>C1122AAH · CABA, Argentina<br>+54 11 5287-4000<br>info@odontologia.uba.ar</address>
+      </div>
+      <nav class="fc"><p class="fc-title">Institucional</p><ul><li><a href="#">La Facultad</a></li><li><a href="#">Historia</a></li><li><a href="#">Autoridades</a></li><li><a href="#">Normativas</a></li><li><a href="#">Transparencia</a></li><li><a href="#">Trabajá en FOUBA</a></li></ul></nav>
+      <nav class="fc"><p class="fc-title">Formación</p><ul><li><a href="#">Grado · Odontología</a></li><li><a href="#">Posgrado</a></li><li><a href="#">Doctorado</a></li><li><a href="#">Extensión</a></li><li><a href="#">Becas UBACYT</a></li><li><a href="#">Intercambio internacional</a></li></ul></nav>
+      <nav class="fc"><p class="fc-title">Servicios</p><ul><li><a href="#clinica">Clínica Odontológica</a></li><li><a href="https://repositorio.odontologia.uba.ar/" target="_blank">Repositorio</a></li><li><a href="http://odontologia.uba.ar/?page_id=8218" target="_blank">Biblioteca digital</a></li><li><a href="#">Campus virtual</a></li><li><a href="#">SIU Guaraní</a></li><li><a href="#">Contacto</a></li></ul></nav>
+    </div>
+    <div class="fb-btm">
+      <p class="fb-copy">© 2026 Facultad de Odontología · Universidad de Buenos Aires · Todos los derechos reservados.</p>
+      <div class="socials">
+        <a href="#" class="soc" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+        <a href="#" class="soc" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+        <a href="https://twitter.com/odontouba" target="_blank" class="soc" aria-label="X / Twitter"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="#" class="soc" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<a href="#clinica" class="sticky-cta">Turnos Clínica →</a>
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<script>
+(function(){
+  // ── Header scroll ──
+  var hdr=document.getElementById('hdr');
+  var navIngresar=document.getElementById('navIngresar');
+  function onScroll(){
+    // Header turns solid once we exit the hero pin-wrap (past it fully)
+    var pinEl = document.getElementById('heroPinWrap');
+    var threshold = pinEl ? (pinEl.offsetHeight - window.innerHeight * 0.15) : 60;
+    var s = window.scrollY > threshold;
+    hdr.classList.toggle('s',s);
+    if(navIngresar)navIngresar.style.display=s?'inline-flex':'none';
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  onScroll();
+
+  // ── Hero scroll-pinned effect ──
+  // Architecture:
+  //   heroPinWrap is 400vh tall — gives us 3 extra viewport-heights of scroll time.
+  //   heroSection (sticky) stays pinned at top during that scroll.
+  //
+  //   Phase 0 → 20% of extra scroll: video playing full, scroll-hint visible
+  //   Phase 20% → 55%: video fades from 1 → 0.08 (ghost), overlay darkens
+  //   Phase 55% → 100%: text layer animates in (CSS transitions via .revealed)
+  //
+  //   Once scroll passes the entire pin-wrap, the section scrolls away normally.
+
+  var pinWrap    = document.getElementById('heroPinWrap');
+  var heroSticky = document.getElementById('heroSection');
+  var textLayer  = document.getElementById('heroTextLayer');
+  var videoWrap  = document.getElementById('heroVideoWrap');
+  var videoOv    = videoWrap ? videoWrap.querySelector('.hero-video-ov') : null;
+  var scrollHint = document.getElementById('scrollHint');
+
+  var textRevealed = false;
+
+  function heroScrollEffect(){
+    if(!pinWrap) return;
+
+    var wrapTop    = pinWrap.getBoundingClientRect().top + window.scrollY;
+    var wrapH      = pinWrap.offsetHeight;
+    var stickyH    = heroSticky ? heroSticky.offsetHeight : window.innerHeight;
+    // scrollable distance inside the pin = total wrap height − one viewport
+    var scrollable = wrapH - stickyH;
+    var scrolled   = Math.max(0, window.scrollY - wrapTop);
+    var p          = Math.min(1, scrolled / scrollable); // 0 → 1
+
+    // ── Scroll hint: hide as soon as user starts scrolling ──
+    if(scrollHint) scrollHint.style.opacity = p < 0.04 ? 1 : Math.max(0, 1 - p * 12);
+
+    // ── Phase 1 (0 → 0.25): video full, overlay stays at base ──
+    // ── Phase 2 (0.25 → 0.6): video fades to ghost 0.08 ──
+    var videoFadeStart = 0.25;
+    var videoFadeEnd   = 0.60;
+    var videoOpacity;
+    if(p < videoFadeStart){
+      videoOpacity = 1;
+    } else {
+      var t = (p - videoFadeStart) / (videoFadeEnd - videoFadeStart);
+      t = Math.min(1, t);
+      // ease-in cubic
+      t = t * t * t;
+      videoOpacity = 1 - t * (1 - 0.08);
+    }
+    if(videoWrap) videoWrap.style.opacity = videoOpacity;
+
+    // Overlay gets slightly darker as video fades (better text contrast)
+    if(videoOv){
+      var ovAlpha = 0.45 + (1 - videoOpacity) * 0.35;
+      videoOv.style.background = 'rgba(6,9,22,' + ovAlpha.toFixed(2) + ')';
+    }
+
+    // ── Phase 3 (0.55 → 1): reveal text layer ──
+    var textRevealAt = 0.55;
+    if(p >= textRevealAt && !textRevealed){
+      textRevealed = true;
+      textLayer.classList.add('revealed','show');
+    } else if(p < textRevealAt && textRevealed){
+      // scrolling back up — reset
+      textRevealed = false;
+      textLayer.classList.remove('revealed','show');
+    }
+  }
+
+  window.addEventListener('scroll', heroScrollEffect, {passive:true});
+  heroScrollEffect(); // run once on load
+
+  // ── Hamburger ──
+  var hamBtn=document.getElementById('hamBtn');
+  var mobNav=document.getElementById('mobNav');
+  var open=false;
+  hamBtn.addEventListener('click',function(){
+    open=!open;
+    hamBtn.classList.toggle('o',open);
+    mobNav.classList.toggle('o',open);
+    hamBtn.setAttribute('aria-expanded',open);
+    document.body.style.overflow=open?'hidden':'';
+  });
+  mobNav.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click',function(){
+      open=false;hamBtn.classList.remove('o');mobNav.classList.remove('o');
+      hamBtn.setAttribute('aria-expanded','false');document.body.style.overflow='';
+    });
+  });
+
+  // ── Scroll reveal ──
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}});
+  },{threshold:0.08,rootMargin:'0px 0px -35px 0px'});
+  document.querySelectorAll('.rv,.rl,.rr').forEach(function(el){obs.observe(el);});
+
+  // ── Centro de Recursos parallax ──
+  var stage=document.getElementById('congStage');
+  var layers=document.querySelectorAll('.cong-layer[data-spd]');
+  var rect=null;var cur=0,tgt=0;
+  function getRect(){if(stage)rect={top:stage.getBoundingClientRect().top+window.scrollY,h:stage.offsetHeight};}
+  getRect();
+  window.addEventListener('resize',getRect,{passive:true});
+  function lerp(a,b,t){return a+(b-a)*t;}
+  function tick(){
+    if(rect&&layers.length){
+      var wh=window.innerHeight;
+      var mid=window.scrollY+wh*0.5;
+      tgt=Math.max(0,Math.min(1,(mid-rect.top)/(rect.h+wh)));
+      cur=lerp(cur,tgt,0.07);
+      var c=(cur-0.5)*2;
+      layers.forEach(function(l){
+        var spd=parseFloat(l.getAttribute('data-spd'))||0;
+        l.style.transform='translateY('+(c*spd*100)+'px)';
+      });
+    }
+    requestAnimationFrame(tick);
+  }
+  if(stage&&layers.length){
+    tick();
+    window.addEventListener('scroll',function(){if(stage)rect={top:stage.getBoundingClientRect().top+window.scrollY,h:stage.offsetHeight};},{passive:true});
+  }
+})();
+</script>
+</body>
+</html>
